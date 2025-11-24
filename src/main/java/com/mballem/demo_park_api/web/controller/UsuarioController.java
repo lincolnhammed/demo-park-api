@@ -6,10 +6,7 @@ import com.mballem.demo_park_api.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 // Gera um construtor com o campo 'final', permitindo injecção limpa.
 @RequiredArgsConstructor
@@ -49,4 +46,17 @@ public class UsuarioController {
         // Retorna 201 CREATED + o objeto criado em formato JSON.
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
+    // Endpoint HTTP GET para obter um usuário pelo ID.
+    // O {id} é capturado da URL, ex: GET /usuarios/5
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> getById(@PathVariable Long id) {
+
+        // Chama o serviço para buscar o usuário.
+        // Se não existir, o serviço lança exceção.
+        Usuario user = usuarioService.buscarPorId(id);
+
+        // Retorna HTTP 200 OK contendo o objeto Usuario como JSON.
+        return ResponseEntity.ok().body(user);
+    }
+
 }

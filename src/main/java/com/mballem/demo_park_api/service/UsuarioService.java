@@ -2,7 +2,7 @@ package com.mballem.demo_park_api.service;
 
 import com.mballem.demo_park_api.entity.Usuario;
 import com.mballem.demo_park_api.repository.UsuarioRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +36,19 @@ public class UsuarioService {
         // Chama o método save() do JpaRepository,
         // que guarda ou actualiza o registo automaticamente.
         return usuarioRepository.save(usuario);
+    }
+    // Indica que o método é transacional apenas para leitura.
+    // Isso melhora performance e garante consistência.
+    @Transactional(readOnly = true)
+    public Usuario buscarPorId(Long id) {
+
+        // O repository procura o usuário no banco.
+        // findById retorna Optional<Usuario>.
+        // Se existir -> devolve o usuário.
+        // Se não existir -> lança RuntimeException com a mensagem definida.
+        return usuarioRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Usuário não Encontrado.")
+        );
     }
 
     // Aqui futuramente podem entrar mais regras de negócio:
