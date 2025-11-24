@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 // Gera um construtor com o campo 'final', permitindo injecção limpa.
 @RequiredArgsConstructor
 
@@ -72,5 +74,16 @@ public class UsuarioController {
         // Devolve código 200 (OK) e o utilizador já com a senha actualizada.
         return ResponseEntity.ok().body(user);
     }
+
+    @GetMapping
+    public ResponseEntity<List<Usuario>> getAll() {
+
+        // Chama o service para obter todos os utilizadores da BD.
+        List<Usuario> users = usuarioService.buscarTodos();
+
+        // Retorna código 200 (OK) e envia a lista de utilizadores em formato JSON.
+        return ResponseEntity.ok(users);
+    }
+
 
 }

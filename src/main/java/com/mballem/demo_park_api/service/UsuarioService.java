@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Service indica ao Spring que esta classe é um componente de serviço.
  * Aqui ficam as regras de negócio relacionadas ao utilizador.
@@ -67,7 +69,14 @@ public class UsuarioService {
         // - ao terminar, o Hibernate faz o UPDATE automaticamente (dirty checking)
         return user;
     }
+    @Transactional(readOnly = true)
+    public List<Usuario> buscarTodos() {
 
+        // Chama o método findAll() do JpaRepository.
+        // Ele faz automaticamente um SELECT * FROM usuario
+        // e devolve a lista de todos os utilizadores existentes na BD.
+        return usuarioRepository.findAll();
+    }
 
 
 
