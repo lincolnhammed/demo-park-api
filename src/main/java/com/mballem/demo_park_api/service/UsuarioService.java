@@ -50,6 +50,26 @@ public class UsuarioService {
                 () -> new RuntimeException("Usuário não Encontrado.")
         );
     }
+    @Transactional
+    public Usuario editarSenha(Long id, String password) {
+
+        // Busca o utilizador pelo ID.
+        // Se não existir, lança uma RuntimeException (podes trocar por algo mais elegante depois).
+        Usuario user = buscarPorId(id);
+
+        // Actualiza somente o campo "password".
+        // Como a entidade está dentro de uma transacção, o Hibernate detecta a alteração.
+        user.setPassword(password);
+
+        // NÃO é necessário chamar save(), porque:
+        // - a entidade está gerida pelo Hibernate
+        // - a transacção está activa
+        // - ao terminar, o Hibernate faz o UPDATE automaticamente (dirty checking)
+        return user;
+    }
+
+
+
 
     // Aqui futuramente podem entrar mais regras de negócio:
     // - validar email único

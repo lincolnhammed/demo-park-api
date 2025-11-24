@@ -58,5 +58,19 @@ public class UsuarioController {
         // Retorna HTTP 200 OK contendo o objeto Usuario como JSON.
         return ResponseEntity.ok().body(user);
     }
+    //@PatchMapping é usado para alterações parciais — aqui estás a actualizar apenas a password, não o utilizador completo.
+    @PatchMapping("/{id}")
+    public ResponseEntity<Usuario> updatePassword(
+            @PathVariable Long id,          // Captura o ID da URL (ex: /usuarios/5)
+            @RequestBody Usuario usuario    // Recebe o JSON com o novo password
+    ) {
+
+        // Chama o serviço para actualizar apenas a senha.
+        // Do JSON recebido, só usamos o campo "password".
+        Usuario user = usuarioService.editarSenha(id, usuario.getPassword());
+
+        // Devolve código 200 (OK) e o utilizador já com a senha actualizada.
+        return ResponseEntity.ok().body(user);
+    }
 
 }
