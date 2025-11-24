@@ -1,26 +1,52 @@
 package com.mballem.demo_park_api.web.controller;
 
-// Importa o serviço que será usado neste controller.
+import com.mballem.demo_park_api.entity.Usuario;
 import com.mballem.demo_park_api.service.UsuarioService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-// Gera automaticamente um construtor com os campos 'final'.
-// É usado para injecção de dependências de forma limpa e segura.
+// Gera um construtor com o campo 'final', permitindo injecção limpa.
 @RequiredArgsConstructor
 
-// Indica que esta classe é um controller REST.
-// O Spring passa a tratar esta classe como um endpoint HTTP.
+// Indica que esta classe expõe endpoints REST.
+// Todos os métodos devolvem JSON automaticamente.
 @RestController
 
-// Define o caminho base para todos os endpoints deste controller.
-// Ex.: http://localhost:8080/api/v1/usuarios
+// Caminho base para todos os endpoints deste controller.
+// Fica: http://localhost:8080/api/v1/usuarios
 @RequestMapping("api/v1/usuarios")
 public class UsuarioController {
 
-    // Dependência obrigatória do serviço de utilizadores.
-    // O 'final' garante imutabilidade e injecção via construtor.
+    /**
+     * Serviço responsável pela lógica de negócio relacionada ao utilizador.
+     * Injectado pelo construtor gerado automaticamente.
+     */
     private final UsuarioService usuarioService;
+
+    /**
+     * @PostMapping indica que este método responde a uma requisição HTTP POST.
+     * É utilizado para criar novos recursos (no caso, um novo utilizador).
+     *
+     * @RequestBody diz ao Spring para converter o JSON recebido
+     * para um objecto Usuario automaticamente.
+     *
+     * ResponseEntity permite controlar:
+     * - o corpo da resposta (body)
+     * - o código HTTP (ex.: 201 CREATED)
+     */
+    @PostMapping
+    public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
+
+        // Chama o serviço para gravar o utilizador na base de dados.
+        Usuario user = usuarioService.salvar(usuario);
+
+        // Retorna 201 CREATED + o objeto criado em formato JSON.
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
 }
