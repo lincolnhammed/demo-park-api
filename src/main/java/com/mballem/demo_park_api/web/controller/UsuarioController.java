@@ -3,6 +3,9 @@ package com.mballem.demo_park_api.web.controller;
 import com.mballem.demo_park_api.entity.Usuario;
 import com.mballem.demo_park_api.service.UsuarioService;
 
+import com.mballem.demo_park_api.web.dto.UsuarioCreateDto;
+import com.mballem.demo_park_api.web.dto.UsuarioResponseDto;
+import com.mballem.demo_park_api.web.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,13 +43,13 @@ public class UsuarioController {
      * - o código HTTP (ex.: 201 CREATED)
      */
     @PostMapping
-    public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto createDto) {
 
         // Chama o serviço para gravar o utilizador na base de dados.
-        Usuario user = usuarioService.salvar(usuario);
+        Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
 
         // Retorna 201 CREATED + o objeto criado em formato JSON.
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
     }
     // Endpoint HTTP GET para obter um usuário pelo ID.
     // O {id} é capturado da URL, ex: GET /usuarios/5

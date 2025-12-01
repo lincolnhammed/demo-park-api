@@ -63,6 +63,7 @@ public class UsuarioService {
         // Como a entidade está dentro de uma transacção, o Hibernate detecta a alteração.
         user.setPassword(password);
 
+
         // NÃO é necessário chamar save(), porque:
         // - a entidade está gerida pelo Hibernate
         // - a transacção está activa
