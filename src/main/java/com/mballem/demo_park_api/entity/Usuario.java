@@ -39,7 +39,7 @@ public class Usuario implements Serializable {//implements Serializable boa prat
     private String modificadoPor;
 
     public enum Role{
-        ROLE_ADMIN, ROLE_CLIENTE
+        ROLE_ADMIN, ROLE_CLIENTE;
     }
 
     @Override
