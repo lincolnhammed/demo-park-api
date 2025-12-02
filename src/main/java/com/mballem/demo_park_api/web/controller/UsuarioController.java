@@ -5,7 +5,7 @@ import com.mballem.demo_park_api.service.UsuarioService;
 
 import com.mballem.demo_park_api.web.dto.UsuarioCreateDto;
 import com.mballem.demo_park_api.web.dto.UsuarioResponseDto;
-import com.mballem.demo_park_api.web.mapper.UsuarioMapper;
+import com.mballem.demo_park_api.web.dto.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,6 @@ public class UsuarioController {
      *
      * @RequestBody diz ao Spring para converter o JSON recebido
      * para um objecto Usuario automaticamente.
-     *
      * ResponseEntity permite controlar:
      * - o corpo da resposta (body)
      * - o código HTTP (ex.: 201 CREATED)
@@ -54,14 +53,14 @@ public class UsuarioController {
     // Endpoint HTTP GET para obter um usuário pelo ID.
     // O {id} é capturado da URL, ex: GET /usuarios/5
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getById(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id) {
 
         // Chama o serviço para buscar o usuário.
         // Se não existir, o serviço lança exceção.
         Usuario user = usuarioService.buscarPorId(id);
 
         // Retorna HTTP 200 OK contendo o objeto Usuario como JSON.
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok(UsuarioMapper.toDto(user));
     }
     //@PatchMapping é usado para alterações parciais — aqui estás a actualizar apenas a password, não o utilizador completo.
     @PatchMapping("/{id}")

@@ -1,4 +1,4 @@
-package com.mballem.demo_park_api.web.mapper;
+package com.mballem.demo_park_api.web.dto.mapper;
 
 import com.mballem.demo_park_api.entity.Usuario;
 import com.mballem.demo_park_api.web.dto.UsuarioCreateDto;
@@ -8,6 +8,12 @@ import org.modelmapper.PropertyMap;
 
 public class UsuarioMapper {
     public static Usuario toUsuario(UsuarioCreateDto createDto){
+        /* essa biblioteca faz isso por de baixo dos panos
+        ModelMapper().map();
+        Usuario user = new Usuario();
+        user.setUserName(createDto.getUserName());
+        user.setPassword(createDto.getPassword());
+        return user;*/
         return new ModelMapper().map(createDto,Usuario.class);
     }
     public static UsuarioResponseDto toDto(Usuario usuario ){
