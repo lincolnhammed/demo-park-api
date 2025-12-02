@@ -53,15 +53,21 @@ public class UsuarioService {
         );
     }
     @Transactional
-    public Usuario editarSenha(Long id, String password) {
-
+    public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
+        if(!novaSenha.equals(confirmaSenha)){
+            throw new RuntimeException("Nova senha não confere com confirmação de senha");
+        }
         // Busca o utilizador pelo ID.
         // Se não existir, lança uma RuntimeException (podes trocar por algo mais elegante depois).
         Usuario user = buscarPorId(id);
+        if(!user.getPassword().equals(senhaAtual)){
+            throw new RuntimeException(" Sua senha não confere.");
+        }
+
 
         // Actualiza somente o campo "password".
         // Como a entidade está dentro de uma transacção, o Hibernate detecta a alteração.
-        user.setPassword(password);
+        user.setPassword(novaSenha);
 
 
         // NÃO é necessário chamar save(), porque:

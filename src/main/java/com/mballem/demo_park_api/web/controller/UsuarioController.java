@@ -5,6 +5,7 @@ import com.mballem.demo_park_api.service.UsuarioService;
 
 import com.mballem.demo_park_api.web.dto.UsuarioCreateDto;
 import com.mballem.demo_park_api.web.dto.UsuarioResponseDto;
+import com.mballem.demo_park_api.web.dto.UsuarioSenhaDto;
 import com.mballem.demo_park_api.web.dto.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -64,17 +65,17 @@ public class UsuarioController {
     }
     //@PatchMapping é usado para alterações parciais — aqui estás a actualizar apenas a password, não o utilizador completo.
     @PatchMapping("/{id}")
-    public ResponseEntity<Usuario> updatePassword(
+    public ResponseEntity<Void> updatePassword(
             @PathVariable Long id,          // Captura o ID da URL (ex: /usuarios/5)
-            @RequestBody Usuario usuario    // Recebe o JSON com o novo password
+            @RequestBody UsuarioSenhaDto senhaDto    // Recebe o JSON com o novo password
     ) {
 
         // Chama o serviço para actualizar apenas a senha.
         // Do JSON recebido, só usamos o campo "password".
-        Usuario user = usuarioService.editarSenha(id, usuario.getPassword());
+        Usuario user = usuarioService.editarSenha(id,senhaDto.getSenhaAtual(),senhaDto.getNovaSenha(),senhaDto.getConfirmaSenha());
 
         // Devolve código 200 (OK) e o utilizador já com a senha actualizada.
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
