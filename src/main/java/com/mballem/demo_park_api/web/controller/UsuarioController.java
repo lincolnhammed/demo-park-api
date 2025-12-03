@@ -67,7 +67,8 @@ public class UsuarioController {
     //@PatchMapping é usado para alterações parciais — aqui estás a actualizar apenas a password, não o utilizador completo.
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePassword(
-            @PathVariable Long id,          // Captura o ID da URL (ex: /usuarios/5)
+            @PathVariable Long id,// Captura o ID da URL (ex: /usuarios/5)
+            @Valid
             @RequestBody UsuarioSenhaDto senhaDto    // Recebe o JSON com o novo password
     ) {
 
