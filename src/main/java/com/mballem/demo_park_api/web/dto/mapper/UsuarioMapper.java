@@ -6,6 +6,9 @@ import com.mballem.demo_park_api.web.dto.UsuarioResponseDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class UsuarioMapper {
     public static Usuario toUsuario(UsuarioCreateDto createDto){
         /* essa biblioteca faz isso por de baixo dos panos
@@ -28,4 +31,13 @@ public class UsuarioMapper {
         mapper.addMappings(props);
         return mapper.map(usuario,UsuarioResponseDto.class);
     }
+
+    public static List<UsuarioResponseDto> toListDto(List<Usuario> usuarios) {
+
+        return usuarios.stream()                // Converte a lista numa stream para processamento funcional
+                .map(user -> toDto(user))// Para cada Usuario, aplica o método toDto(), convertendo-o para DTO
+                .collect(Collectors.toList()); // Recolhe os DTOs e devolve-os como uma nova lista
+    }
+
+
 }

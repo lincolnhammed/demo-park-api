@@ -79,13 +79,18 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> getAll() {
+    public ResponseEntity<List<UsuarioResponseDto>> getAll() {
 
         // Chama o service para obter todos os utilizadores da BD.
+        // O service encapsula a lógica de acesso ao repositório (boa prática da arquitetura).
         List<Usuario> users = usuarioService.buscarTodos();
 
-        // Retorna código 200 (OK) e envia a lista de utilizadores em formato JSON.
-        return ResponseEntity.ok(users);
+        // Converte a lista de entidades Usuario para uma lista de DTOs.
+        // Esta conversão evita expor diretamente a entidade JPA no JSON.
+        List<UsuarioResponseDto> usersDto = UsuarioMapper.toListDto(users);
+
+        // Retorna código 200 (OK) e envia a lista de utilizadores já convertida para DTO em formato JSON.
+        return ResponseEntity.ok(usersDto);
     }
 
 
