@@ -1,6 +1,7 @@
 package com.mballem.demo_park_api.service;
 
 import com.mballem.demo_park_api.entity.Usuario;
+import com.mballem.demo_park_api.exception.EntityNotFoundException;
 import com.mballem.demo_park_api.exception.UsernameUniqueViolationExeption;
 import com.mballem.demo_park_api.repository.UsuarioRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,14 +58,18 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id) {
 
-        // O repository procura o usuário no banco.
-        // findById retorna Optional<Usuario>.
-        // Se existir -> devolve o usuário.
-        // Se não existir -> lança RuntimeException com a mensagem definida.
+        // Procura o utilizador pelo ID no repositório.
+        // findById() devolve um Optional<Usuario>.
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuário não Encontrado.")
+
+                // Se o utilizador não existir, lança EntityNotFoundException
+                // com uma mensagem personalizada.
+                () -> new EntityNotFoundException(
+                        String.format("Usuário id=%s não encontrado.", id)
+                )
         );
     }
+
     @Transactional
     public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
         if(!novaSenha.equals(confirmaSenha)){
