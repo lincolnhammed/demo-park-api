@@ -1,5 +1,6 @@
 package com.mballem.demo_park_api.web.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.ToString;
@@ -27,6 +28,8 @@ public class ErrorMessage {
     // Mensagem geral de erro definida por ti
     private String menssage;
 
+    // Não mostra no JSON os campos que estiverem null.
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     // Mapa com erros específicos de validação (campo -> mensagem)
     private Map<String, String> errors;
 

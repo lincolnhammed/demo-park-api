@@ -1,6 +1,7 @@
 package com.mballem.demo_park_api.service;
 
 import com.mballem.demo_park_api.entity.Usuario;
+import com.mballem.demo_park_api.exception.UsernameUniqueViolationExeption;
 import com.mballem.demo_park_api.repository.UsuarioRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +36,21 @@ public class UsuarioService {
      */
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        // Chama o método save() do JpaRepository,
-        // que guarda ou actualiza o registo automaticamente.
-        return usuarioRepository.save(usuario);
+        try {
+            // Tenta guardar o utilizador no banco de dados.
+            // O save() lança DataIntegrityViolationException quando há violação de chave única.
+            return usuarioRepository.save(usuario);
+
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+
+            // Se o username já existir, lança a tua exceção personalizada.
+            // Esta mensagem será tratada pelo ApiExceptionHandler e devolvida como erro 409.
+            throw new UsernameUniqueViolationExeption(
+                    String.format("Username {%s} já cadastrado", usuario.getUserName())
+            );
+        }
+
+
     }
     // Indica que o método é transacional apenas para leitura.
     // Isso melhora performance e garante consistência.

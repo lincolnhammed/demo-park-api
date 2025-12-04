@@ -1,5 +1,6 @@
 package com.mballem.demo_park_api.web.exception;
 
+import com.mballem.demo_park_api.exception.UsernameUniqueViolationExeption;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,5 +40,30 @@ public class ApiExceptionHandler {
                         result // Lista de erros de validação
                 ));
     }
+
+    @ExceptionHandler(UsernameUniqueViolationExeption.class)
+    // Este método trata a exceção lançada quando o username já existe.
+
+    public ResponseEntity<ErrorMessage> MethodArgumentNotValidException(RuntimeException ex,
+                                                                        HttpServletRequest request) {
+
+        log.error("Api Error - ", ex);
+        // Regista o erro no log.
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                // Retorna HTTP 409 (CONFLICT), apropriado para dados duplicados.
+
+                .contentType(MediaType.APPLICATION_JSON)
+                // Garante resposta no formato JSON.
+
+                .body(new ErrorMessage(
+                        request,
+                        HttpStatus.CONFLICT,
+                        ex.getMessage()
+                        // Usa a mensagem da exceção como descrição do erro.
+                ));
+    }
+
 }
 
